@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import SeasonDisplay from './SeasonDisplay';
-
+import Spinner from './Spinner';
 
 class App extends React.Component {
     //babel turns this into a constructor so this is a shortcut
@@ -10,16 +10,20 @@ class App extends React.Component {
         errorMessage: false
     }
 
+    renderContent() {
+        if (this.state.errorMessage && !this.state.latitude) {
+            return <h2>{this.state.errorMessage}</h2>
+        }
+        if (this.state.latitude && !this.state.errorMessage) {
+            return <SeasonDisplay latitude={this.state.latitude} />
+        }
+        return <Spinner message='Please accept location request...'/>
+    }
+ 
     render() {
         return (
-            <div>
-                {this.state.errorMessage &&
-                    <h2>{this.state.errorMessage}</h2>
-                }
-                {this.state.latitude &&
-                    <p>latitude: {this.state.latitude}</p>
-                }
-                <SeasonDisplay />
+            <div className='border red'>
+                {this.renderContent()}
             </div>
         );
     }
